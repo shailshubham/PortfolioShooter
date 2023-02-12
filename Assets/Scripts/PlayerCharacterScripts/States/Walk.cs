@@ -16,18 +16,16 @@ public class Walk : IState
         this.inputData = inputData;
     }
 
-    public void Update()
+        public void Update()
     {
         movement();
-        Gravity();
-
     }
-    void OnEnter()
+    public void OnEnter()
     {
 
     }
 
-    void OnExit()
+    public void OnExit()
     {
         anim.SetFloat("forward", 0f);
         anim.SetFloat("strafe", 0f);
@@ -35,13 +33,8 @@ public class Walk : IState
     void movement()
     {
         Vector3 dir = controller.transform.forward * inputData.dpadInput.y + controller.transform.right * inputData.dpadInput.x;
-        controller.Move(dir * characterData.speed * Time.deltaTime*.5f);
+        controller.Move(dir * characterData.speed * Time.deltaTime*.33f);
         anim.SetFloat("forward", inputData.dpadInput.y * .5f);
         anim.SetFloat("strafe", inputData.dpadInput.x * .5f);
-    }
-
-    void Gravity()
-    {
-        controller.Move(Vector3.down * characterData.gravity * Time.deltaTime);
     }
 }

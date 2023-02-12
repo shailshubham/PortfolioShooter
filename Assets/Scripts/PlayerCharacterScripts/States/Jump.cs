@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static PlayerCharacter;
 
 public class Jump : IState
 {
@@ -9,8 +10,9 @@ public class Jump : IState
     InputData inputData;
     StateMachine state;
     PlayerCharacter character;
+    bool land = false;
 
-    Vector3 jumpVelocity= Vector3.zero;
+    Vector3 velocity= Vector3.zero;
     public Jump
         (
         Animator animator,
@@ -27,25 +29,37 @@ public class Jump : IState
         this.state= state;
         this.character = character;
     }
-    void OnEnter()
+    public void OnEnter()
     {
-        jumpVelocity.y += Mathf.Sqrt(character.characterData.jumpHight * character.characterData.gravity);
+        land = false;
+        velocity.y = Mathf.Sqrt(character.characterData.jumpHight * -character.characterData.gravity);
         anim.SetTrigger("jump");
     }
 
-    void Update()
+    public void Update()
     {
-        jumpVelocity.y -= character.characterData.gravity * Time.deltaTime;
-        controller.Move(jumpVelocity * Time.deltaTime);
+        if(character.characterData.isGrounded&&velocity.y<0)
+        {
+            velocity.y = -2;
+        }
+        velocity.y += character.characterData.gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
+
+        if (character.characterData.GroundDistance < .5f&&!land)
+        {
+            anim.SetTrigger("land");
+            land = true;
+        }
         //updating characterMovement
         Vector3 dir = controller.transform.forward * inputData.dpadInput.y + controller.transform.right * inputData.dpadInput.x;
         if(state.previousState == character.run)
-             controller.Move(dir * character.characterData.speed * Time.deltaTime);
+            controller.Move(dir * character.characterData.speed * Time.deltaTime);
         else
             controller.Move(dir * character.characterData.speed * Time.deltaTime*.5f);
+
     }
 
-    void OnExit()
+    public void OnExit()
     {
 
     }

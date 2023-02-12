@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerCharacter : MonoBehaviour
@@ -19,8 +20,10 @@ public class PlayerCharacter : MonoBehaviour
     public class CharacterData
     {
         public float speed = 10f;
-        public float gravity = 9.81f;
+        public float gravity = -9.81f;
         public float jumpHight = 1f;
+        public bool isGrounded = false;
+        public float GroundDistance;
     }
     public CharacterData characterData;
     private void Awake()
@@ -34,7 +37,7 @@ public class PlayerCharacter : MonoBehaviour
     void Start()
     {
         //creating instances of all the states
-        idle = new Idle(anim);
+        idle = new Idle(anim,characterController,characterData);
         walk = new Walk(anim, characterController, inputData, characterData);
         run = new Run(anim,characterController,inputData,characterData);
         jump = new Jump(anim, characterController, inputData,state,this);
@@ -48,35 +51,50 @@ public class PlayerCharacter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        characterData.isGrounded = GroundCheck(out characterData.GroundDistance);
     }
 
     void TransitionSetup()
     {
         //Transitions from any state
-        state.AddAnyTransition(jump, () => { return inputData.jump; });
+        state.AddAnyTransition(jump,JumpCondition);
 
         //Transitions from walk stats
-        At(run, walk, () => { return inputData.run && (inputData.dpadInput.magnitude > 0f); });
-        At(idle, walk, () => { return (inputData.dpadInput.magnitude == 0f); });
+        At(run, walk, RunCondition);
+        At(idle, walk, IdleCondition);
 
         //transitions from run state
-        At(walk, run, () => { return !inputData.run && (inputData.dpadInput.magnitude > 0f); });
-        At(idle, run, () => { return (inputData.dpadInput.magnitude == 0f); });
+        At(walk, run,WalkCondition);
+        At(idle, run,IdleCondition);
 
         //transitions from idle state
-        state.AddTransition(walk, idle,Walk());
-        state.AddTransition(run, idle,Run());
+        At(walk, idle, WalkCondition);
+        At(run, idle,RunCondition);
 
         //transitions from jumpstate
-        At(run, jump, () => { return inputData.run && (inputData.dpadInput.magnitude > 0f)&&characterController.isGrounded; });
-        At(walk, jump, () => { return !inputData.run && (inputData.dpadInput.magnitude > 0f) && characterController.isGrounded; });
-        At(idle, jump, () => { return (inputData.dpadInput.magnitude == 0f) && characterController.isGrounded; });
+        At(run, jump, RunCondition);
+        At(walk, jump,WalkCondition);
+        At(idle, jump, IdleCondition);
 
     }
+    bool WalkCondition()
+    {
+        return !inputData.run && (inputData.dpadInput.magnitude > 0f) && characterData.isGrounded;
+    }
+    bool RunCondition()
+    {
+        return inputData.run && (inputData.dpadInput.magnitude > 0f) && characterData.isGrounded;
+    }
 
-    Func<bool> Walk()=>()=> (!inputData.run && (inputData.dpadInput.magnitude > 0f));
-    Func<bool> Run() => () => (inputData.run && (inputData.dpadInput.magnitude > 0f));
+    bool JumpCondition()
+    {
+        return inputData.jump&&characterData.isGrounded;
+    }
+
+    bool IdleCondition()
+    {
+        return ((inputData.dpadInput.magnitude == 0f) && characterData.isGrounded);
+    }
 
     void At(IState to, IState from, Func<bool> condition) => state.AddTransition(to, from, condition);
     void SetupAnimator()
@@ -85,5 +103,26 @@ public class PlayerCharacter : MonoBehaviour
         Avatar childAvtar = childAnim.avatar;
         anim.avatar = childAvtar;
         Destroy(childAnim);
+    }
+
+    public bool GroundCheck(out float groundDistance)
+    {
+        float minimalDist = .1f;
+        if(Physics.Raycast(transform.position-transform.up*minimalDist*.5f,-transform.up, out RaycastHit hitInfo))
+        {
+            float distance = hitInfo.distance;
+            if(distance<minimalDist)
+            {
+                groundDistance = distance;
+                return true;
+            }
+            else
+            {
+                groundDistance = distance;
+                return false;
+            }
+        }
+        groundDistance = 1000f;
+        return false;
     }
 }

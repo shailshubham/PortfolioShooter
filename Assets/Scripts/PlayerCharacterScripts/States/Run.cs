@@ -21,12 +21,12 @@ public class Run : IState
         movement();
         Gravity();
     }
-    void OnEnter()
+    public void OnEnter()
     {
 
     }
 
-    void OnExit()
+    public void OnExit()
     {
         anim.SetFloat("forward",0f);
         anim.SetFloat("strafe", 0f);
@@ -34,7 +34,14 @@ public class Run : IState
 
     void movement()
     {
-        Vector3 dir = controller.transform.forward * inputData.dpadInput.y + controller.transform.right * inputData.dpadInput.x;
+        float y = inputData.dpadInput.y;
+        float x = inputData.dpadInput.x;
+        if (y < 0f)
+        {
+            y *= .33f;
+            x *= .33f;
+        }
+        Vector3 dir = controller.transform.forward * y + controller.transform.right * x;
         controller.Move(dir * characterData.speed * Time.deltaTime);
         anim.SetFloat("forward", inputData.dpadInput.y);
         anim.SetFloat("strafe", inputData.dpadInput.x);
@@ -42,6 +49,6 @@ public class Run : IState
 
     void Gravity()
     {
-        controller.Move(Vector3.down * characterData.gravity * Time.deltaTime);
+        controller.Move(Vector3.up * characterData.gravity * Time.deltaTime);
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour
 {
-    public IState CurrentState { get; set; }
+    public IState currentState;
     [HideInInspector] public IState previousState;
     public Dictionary<Type,List<Transition>> transitions = new Dictionary<Type,List<Transition>>();
     List<Transition> currentTransitions= new List<Transition>();
@@ -22,12 +22,12 @@ public class StateMachine : MonoBehaviour
     void Update()
     {
         Tick();
-        Debug.Log(CurrentState);
+        Debug.Log(currentState);
     }
 
     private void FixedUpdate()
     {
-        IStateFixedUpdate state = CurrentState as IStateFixedUpdate;
+        IStateFixedUpdate state = currentState as IStateFixedUpdate;
         if (state != null)
         {
             state.FixedUpdate();
@@ -41,21 +41,21 @@ public class StateMachine : MonoBehaviour
         {
             SetState(t.To);
         }
-        CurrentState.Update();
+        currentState.Update();
     }
 
     public void SetState(IState state)
     {
-        if(state == CurrentState) return;
-        if (CurrentState != null)
-            CurrentState.OnExit();
-        previousState= state;
-        CurrentState = state;
+        if(state == currentState) return;
+        if (currentState != null)
+            currentState.OnExit();
+        previousState= currentState;
+        currentState = state;
 
-        transitions.TryGetValue(CurrentState.GetType(), out currentTransitions);
+        transitions.TryGetValue(currentState.GetType(), out currentTransitions);
         if (currentTransitions == null)
             currentTransitions = emptyTransition;
-        CurrentState.OnEnter();      
+        currentState.OnEnter();      
     }
 
     [System.Serializable]
