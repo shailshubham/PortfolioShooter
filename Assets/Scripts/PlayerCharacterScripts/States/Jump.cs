@@ -33,7 +33,10 @@ public class Jump : IState
     {
         land = false;
         velocity.y = Mathf.Sqrt(character.characterData.jumpHight * -character.characterData.gravity);
-        anim.SetTrigger("jump");
+        if (state.previousState == character.run)
+            anim.SetTrigger("runJump");
+        else
+            anim.SetTrigger("jump");
     }
 
     public void Update()
@@ -45,7 +48,7 @@ public class Jump : IState
         velocity.y += character.characterData.gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
 
-        if (character.characterData.GroundDistance < .5f&&!land)
+        if (character.characterData.GroundDistance < 1f&&!land)
         {
             anim.SetTrigger("land");
             land = true;

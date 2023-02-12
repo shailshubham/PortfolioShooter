@@ -23,11 +23,12 @@ public class Run : IState
     }
     public void OnEnter()
     {
-
+        anim.SetBool("run", true);
     }
 
     public void OnExit()
     {
+        anim.SetBool("run", false);
         anim.SetFloat("forward",0f);
         anim.SetFloat("strafe", 0f);
     }
@@ -44,7 +45,7 @@ public class Run : IState
         Vector3 dir = controller.transform.forward * y + controller.transform.right * x;
         controller.Move(dir * characterData.speed * Time.deltaTime);
         anim.SetFloat("forward", inputData.dpadInput.y);
-        anim.SetFloat("strafe", inputData.dpadInput.x);
+        anim.SetFloat("strafe", inputData.dpadInput.x );
     }
 
     void Gravity()

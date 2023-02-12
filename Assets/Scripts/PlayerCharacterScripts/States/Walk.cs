@@ -34,7 +34,7 @@ public class Walk : IState
     {
         Vector3 dir = controller.transform.forward * inputData.dpadInput.y + controller.transform.right * inputData.dpadInput.x;
         controller.Move(dir * characterData.speed * Time.deltaTime*.33f);
-        anim.SetFloat("forward", inputData.dpadInput.y * .5f);
-        anim.SetFloat("strafe", inputData.dpadInput.x * .5f);
+        anim.SetFloat("forward", inputData.dpadInput.y);
+        anim.SetFloat("strafe", inputData.dpadInput.x);
     }
 }

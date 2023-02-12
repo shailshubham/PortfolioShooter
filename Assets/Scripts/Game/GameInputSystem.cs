@@ -22,8 +22,13 @@ public class GameInputSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        inputData.dpadInput.x = Input.GetAxis("Horizontal");
-        inputData.dpadInput.y = Input.GetAxis("Vertical");
+        float x = Input.GetAxis("Horizontal");
+        float y = Input.GetAxis("Vertical");
+        
+        inputData.dpadInput.x = x;
+        inputData.dpadInput.y = y;
+
+
         if(Input.GetKeyDown(KeyCode.Space))
         {
             inputData.jump = true;
