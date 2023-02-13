@@ -28,8 +28,7 @@ public class PlayerCharacter : MonoBehaviour
     public CharacterData characterData;
     private void Awake()
     {
-        anim = GetComponent<Animator>();
-        SetupAnimator();
+        anim = GetComponentInChildren<Animator>();
         characterController = GetComponent<CharacterController>();
         state = GetComponent<StateMachine>();
     }
@@ -97,13 +96,6 @@ public class PlayerCharacter : MonoBehaviour
     }
 
     void At(IState to, IState from, Func<bool> condition) => state.AddTransition(to, from, condition);
-    void SetupAnimator()
-    {
-        Animator childAnim = transform.GetChild(0).GetComponent<Animator>();
-        Avatar childAvtar = childAnim.avatar;
-        anim.avatar = childAvtar;
-        Destroy(childAnim);
-    }
 
     public bool GroundCheck(out float groundDistance)
     {
