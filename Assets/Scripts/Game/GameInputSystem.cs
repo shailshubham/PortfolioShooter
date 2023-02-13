@@ -28,8 +28,14 @@ public class GameInputSystem : MonoBehaviour
         inputData.dpadInput.x = x;
         inputData.dpadInput.y = y;
 
+        float  pointerX = Input.GetAxis("Mouse X");
+        float pointerY = Input.GetAxis("Mouse Y");
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        inputData.pointerInput.x = pointerX;
+        inputData.pointerInput.y = pointerY;
+
+
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             inputData.jump = true;
         }
