@@ -6,18 +6,20 @@ using static PlayerCharacter;
 public class Idle : IState
 {
     Animator anim;
-    CharacterController controller;
-    CharacterData characterData;
-    public Idle(Animator animator, CharacterController controller,CharacterData characterData)
+    InputData inputData;
+    CharacterMover mover;
+    AnimationRiggingController rigController;
+    public Idle(PlayerCharacter character)
     {
-        anim= animator;
-        this.controller = controller;
-        this.characterData = characterData;
+        anim = character.Anim;
+        mover = character.CharacterMover;
+        inputData = character.inputData;
+        rigController = character.RigController;
     }
 
     public void Update()
     {
-        Gravity();
+        
     }
     public void OnEnter() 
     {
@@ -28,9 +30,5 @@ public class Idle : IState
     public void OnExit()
     { 
 
-    }
-    void Gravity()
-    {
-        controller.Move(Vector3.up * characterData.gravity * Time.deltaTime);
     }
 }

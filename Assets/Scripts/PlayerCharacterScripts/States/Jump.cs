@@ -6,34 +6,25 @@ using static PlayerCharacter;
 public class Jump : IState
 {
     Animator anim;
-    CharacterController controller;
     InputData inputData;
-    StateMachine state;
+    CharacterMover mover;
+    AnimationRiggingController rigController;
     PlayerCharacter character;
     bool land = false;
 
-    Vector3 velocity= Vector3.zero;
-    public Jump
-        (
-        Animator animator,
-        CharacterController characterController,
-        InputData inputData,
-        StateMachine state,
-        PlayerCharacter character
-        
-        )
+    public Jump(PlayerCharacter character)
     {
-        anim = animator;
-        controller = characterController;
-        this.inputData = inputData;
-        this.state= state;
+        anim = character.Anim;
+        mover = character.CharacterMover;
+        inputData = character.inputData;
+        rigController = character.RigController;
         this.character = character;
     }
     public void OnEnter()
     {
         land = false;
-        velocity.y = Mathf.Sqrt(character.characterData.jumpHight * -character.characterData.gravity);
-        if (state.previousState == character.run)
+        mover.Jump();
+        if (character.StateMachine.previousState == character.run)
             anim.SetTrigger("runJump");
         else
             anim.SetTrigger("jump");
@@ -41,24 +32,17 @@ public class Jump : IState
 
     public void Update()
     {
-        if(character.characterData.isGrounded&&velocity.y<0)
-        {
-            velocity.y = -2;
-        }
-        velocity.y += character.characterData.gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
 
-        if (character.characterData.GroundDistance < 1f&&!land)
+        if (mover.GroundDistance < 1f&&!land)
         {
             anim.SetTrigger("land");
             land = true;
         }
         //updating characterMovement
-        Vector3 dir = controller.transform.forward * inputData.dpadInput.y + controller.transform.right * inputData.dpadInput.x;
-        if(state.previousState == character.run)
-            controller.Move(dir * character.characterData.speed * Time.deltaTime);
+        if (character.StateMachine.previousState == character.run)
+            mover.MoveCharacter(1f);
         else
-            controller.Move(dir * character.characterData.speed * Time.deltaTime*.5f);
+            mover.MoveCharacter(.5f);
 
     }
 

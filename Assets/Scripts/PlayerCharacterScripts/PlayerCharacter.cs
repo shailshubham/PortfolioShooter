@@ -6,57 +6,51 @@ using UnityEngine;
 
 public class PlayerCharacter : MonoBehaviour
 {
-    Animator anim;
-    CharacterController characterController;
-    StateMachine state;
+    public Animator Anim { get; private set; }
+    public CharacterMover CharacterMover { get; private set; }
+    public AnimationRiggingController RigController { get; private set; }
+    public StateMachine StateMachine { get; private set; }
     Idle idle;
     Walk walk;
     public Run run;
     public Jump jump;
-
-[SerializeField] InputData inputData;
-
-    [System.Serializable]
-    public class CharacterData
+    [SerializeField] InputData input;
+    public InputData inputData
     {
-        public float speed = 10f;
-        public float gravity = -9.81f;
-        public float jumpHight = 1f;
-        public bool isGrounded = false;
-        public float GroundDistance;
+        get { return input; }
     }
-    public CharacterData characterData;
     private void Awake()
     {
-        anim = GetComponentInChildren<Animator>();
-        characterController = GetComponent<CharacterController>();
-        state = GetComponent<StateMachine>();
+        Anim = GetComponentInChildren<Animator>();
+        CharacterMover = GetComponent<CharacterMover>();
+        RigController = GetComponent<AnimationRiggingController>();
+        StateMachine = GetComponent<StateMachine>();
     }
     // Start is called before the first frame update
     void Start()
     {
         //creating instances of all the states
-        idle = new Idle(anim,characterController,characterData);
-        walk = new Walk(anim, characterController, inputData, characterData);
-        run = new Run(anim,characterController,inputData,characterData);
-        jump = new Jump(anim, characterController, inputData,state,this);
+        idle = new Idle(this);
+        walk = new Walk(this);
+        run = new Run(this);
+        jump = new Jump(this); ;
 
         TransitionSetup();
 
-        state.SetState(idle);
+        StateMachine.SetState(idle);
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        characterData.isGrounded = GroundCheck(out characterData.GroundDistance);
+        
     }
 
     void TransitionSetup()
     {
         //Transitions from any state
-        state.AddAnyTransition(jump,JumpCondition);
+        StateMachine.AddAnyTransition(jump,JumpCondition);
 
         //Transitions from walk stats
         At(run, walk, RunCondition);
@@ -78,43 +72,22 @@ public class PlayerCharacter : MonoBehaviour
     }
     bool WalkCondition()
     {
-        return !inputData.run && (inputData.dpadInput.magnitude > 0f) && characterData.isGrounded;
+        return !input.run && (input.dpadInput.magnitude > 0f) && CharacterMover.isGrounded;
     }
     bool RunCondition()
     {
-        return inputData.run && (inputData.dpadInput.magnitude > 0f) && characterData.isGrounded;
+        return input.run && (input.dpadInput.magnitude > 0f) && CharacterMover.isGrounded;
     }
 
     bool JumpCondition()
     {
-        return inputData.jump&&characterData.isGrounded;
+        return input.jump&& CharacterMover.isGrounded;
     }
 
     bool IdleCondition()
     {
-        return ((inputData.dpadInput.magnitude == 0f) && characterData.isGrounded);
+        return ((input.dpadInput.magnitude == 0f) && CharacterMover.isGrounded);
     }
 
-    void At(IState to, IState from, Func<bool> condition) => state.AddTransition(to, from, condition);
-
-    public bool GroundCheck(out float groundDistance)
-    {
-        float minimalDist = .1f;
-        if(Physics.Raycast(transform.position-transform.up*minimalDist*.5f,-transform.up, out RaycastHit hitInfo))
-        {
-            float distance = hitInfo.distance;
-            if(distance<minimalDist)
-            {
-                groundDistance = distance;
-                return true;
-            }
-            else
-            {
-                groundDistance = distance;
-                return false;
-            }
-        }
-        groundDistance = 1000f;
-        return false;
-    }
+    void At(IState to, IState from, Func<bool> condition) => StateMachine.AddTransition(to, from, condition);
 }
