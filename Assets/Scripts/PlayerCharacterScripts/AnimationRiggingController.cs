@@ -11,10 +11,12 @@ public class AnimationRiggingController : MonoBehaviour
 
     [HideInInspector]public float leftHandWeight = 0f;
     [HideInInspector]public float rightHandWeight = 1f;
+
+    RigBuilder rigBuilder;
     // Start is called before the first frame update
     void Start()
     {
-        
+        rigBuilder = GetComponent<RigBuilder>();
     }
 
     // Update is called once per frame

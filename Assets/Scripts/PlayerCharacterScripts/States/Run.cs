@@ -30,6 +30,7 @@ public class Run : IState
     public void OnEnter()
     {
         anim.SetBool("run", true);
+        rigController.leftHandWeight = 0f;
     }
 
     public void OnExit()

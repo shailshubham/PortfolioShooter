@@ -24,7 +24,7 @@ public class Walk : IState
     }
     public void OnEnter()
     {
-
+        rigController.leftHandWeight = 1f;
     }
 
     public void OnExit()

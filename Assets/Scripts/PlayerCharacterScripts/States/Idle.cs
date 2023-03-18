@@ -25,6 +25,7 @@ public class Idle : IState
     {
         anim.SetFloat("forward", 0f);
         anim.SetFloat("strafe", 0f);
+        rigController.leftHandWeight = 1f;
     }
 
     public void OnExit()

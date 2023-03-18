@@ -8,6 +8,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] Transform aimTarget;
     [SerializeField] float sensitivity = 1f;
     [SerializeField] float min, max;
+
+    Vector3 xRot = Vector3.zero;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,10 +19,11 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float xRot = inputData.pointerInput.y*sensitivity;
-        xRot = Mathf.Clamp(xRot, min, max);
+        xRot.x += -inputData.pointerInput.y*sensitivity;
+        xRot.x = Mathf.Clamp(xRot.x, min, max);
+        aimTarget.localRotation = Quaternion.Euler(xRot);
+
         float yRot = inputData.pointerInput.x*sensitivity;
-        aimTarget.rotation *= Quaternion.Euler(new Vector3(-xRot,0f,0f));
         transform.rotation *= Quaternion.Euler(new Vector3(0f,yRot,0f));
     }
 }

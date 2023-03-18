@@ -22,7 +22,6 @@ public class StateMachine : MonoBehaviour
     void Update()
     {
         Tick();
-        Debug.Log(currentState);
     }
 
     private void FixedUpdate()

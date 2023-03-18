@@ -33,9 +33,9 @@ public class Jump : IState
     public void Update()
     {
 
-        if (mover.GroundDistance < 1f&&!land)
+        if (mover.GroundDistance < .5f&&!land && mover.velocity.y <0)
         {
-            anim.SetTrigger("land");
+
             land = true;
         }
         //updating characterMovement
@@ -48,6 +48,6 @@ public class Jump : IState
 
     public void OnExit()
     {
-
+        anim.SetTrigger("land");
     }
 }

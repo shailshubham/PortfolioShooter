@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerCharacter : MonoBehaviour
@@ -22,6 +21,7 @@ public class PlayerCharacter : MonoBehaviour
     private void Awake()
     {
         Anim = GetComponentInChildren<Animator>();
+        //SetupAnimator();
         CharacterMover = GetComponent<CharacterMover>();
         RigController = GetComponent<AnimationRiggingController>();
         StateMachine = GetComponent<StateMachine>();
@@ -90,4 +90,11 @@ public class PlayerCharacter : MonoBehaviour
     }
 
     void At(IState to, IState from, Func<bool> condition) => StateMachine.AddTransition(to, from, condition);
+
+    void SetupAnimator()
+    {
+        Animator childAnim = transform.GetChild(0).GetComponent<Animator>();
+        Anim.avatar = childAnim.avatar;
+        childAnim.avatar = null;
+    }
 }

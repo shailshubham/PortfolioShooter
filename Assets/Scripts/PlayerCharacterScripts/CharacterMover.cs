@@ -7,13 +7,18 @@ public class CharacterMover : MonoBehaviour
     public float speed = 10f;
     public float gravity = -9.81f;
     public float jumpHight = 2f;
-    public bool isGrounded = false;
+
+
+
+    [HideInInspector]public bool isGrounded = false;
     public float GroundDistance;
+    [SerializeField] GameObject groundCheckTransform;
+    [SerializeField]LayerMask layer;
 
     CharacterController controller;
     [SerializeField]InputData inputData;
 
-    Vector3 velocity = Vector3.zero;
+    public Vector3 velocity = Vector3.zero;
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -27,8 +32,13 @@ public class CharacterMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        isGrounded = GroundCheck(out GroundDistance);
         TickGravity();
+    }
+
+    private void FixedUpdate()
+    {
+        isGrounded = GroundCheckNew(out GroundDistance);
+        Debug.Log(isGrounded);
     }
 
     public void Jump()
@@ -52,24 +62,10 @@ public class CharacterMover : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
     }
 
-    public bool GroundCheck(out float groundDistance)
+    public bool GroundCheckNew(out float hitDistance)
     {
-        float minimalDist = .1f;
-        if (Physics.Raycast(transform.position - transform.up * minimalDist * .5f, -transform.up, out RaycastHit hitInfo))
-        {
-            float distance = hitInfo.distance;
-            if (distance < minimalDist)
-            {
-                groundDistance = distance;
-                return true;
-            }
-            else
-            {
-                groundDistance = distance;
-                return false;
-            }
-        }
-        groundDistance = 1000f;
-        return false;
+        Physics.Raycast(transform.position, -transform.up, out RaycastHit hitInfo, layer);
+        hitDistance = hitInfo.distance;
+        return Physics.CheckSphere(transform.position, .25f, layer);
     }
 }
