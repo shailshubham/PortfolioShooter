@@ -10,6 +10,7 @@ public class Jump : IState
     CharacterMover mover;
     AnimationRiggingController rigController;
     PlayerCharacter character;
+    WeaponSystem weaponSystem;
     bool land = false;
 
     public Jump(PlayerCharacter character)
@@ -19,6 +20,7 @@ public class Jump : IState
         inputData = character.inputData;
         rigController = character.RigController;
         this.character = character;
+        weaponSystem = character.weaponSystem;
     }
     public void OnEnter()
     {
@@ -43,11 +45,30 @@ public class Jump : IState
             mover.MoveCharacter(1f);
         else
             mover.MoveCharacter(.5f);
-
+        if (weaponSystem.IsWeaponEquipped)
+        {
+            rigController.rightHandWeight = 1;
+            rigController.leftHandWeight = 0;
+        }
+        else
+        {
+            rigController.rightHandWeight = 0;
+            rigController.leftHandWeight = 0;
+        }
     }
 
     public void OnExit()
     {
         anim.SetTrigger("land");
+        if (weaponSystem.IsWeaponEquipped)
+        {
+            rigController.rightHandWeight = 1;
+            rigController.leftHandWeight = 1;
+        }
+        else
+        {
+            rigController.rightHandWeight = 0;
+            rigController.leftHandWeight = 0;
+        }
     }
 }

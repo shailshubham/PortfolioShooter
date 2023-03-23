@@ -9,8 +9,11 @@ public class PlayerCharacter : MonoBehaviour
     public CharacterMover CharacterMover { get; private set; }
     public AnimationRiggingController RigController { get; private set; }
     public StateMachine StateMachine { get; private set; }
+    public WeaponSystem weaponSystem { get; private set; }
+    public CameraController camController { get; private set; }
     Idle idle;
     Walk walk;
+    Aim aim;
     public Run run;
     public Jump jump;
     [SerializeField] InputData input;
@@ -25,6 +28,8 @@ public class PlayerCharacter : MonoBehaviour
         CharacterMover = GetComponent<CharacterMover>();
         RigController = GetComponent<AnimationRiggingController>();
         StateMachine = GetComponent<StateMachine>();
+        weaponSystem = GetComponent<WeaponSystem>();
+        camController = GetComponent<CameraController>();
     }
     // Start is called before the first frame update
     void Start()
@@ -34,7 +39,7 @@ public class PlayerCharacter : MonoBehaviour
         walk = new Walk(this);
         run = new Run(this);
         jump = new Jump(this); ;
-
+        aim = new Aim(this);
         TransitionSetup();
 
         StateMachine.SetState(idle);
@@ -55,28 +60,36 @@ public class PlayerCharacter : MonoBehaviour
         //Transitions from walk stats
         At(run, walk, RunCondition);
         At(idle, walk, IdleCondition);
+        At(aim, walk, AimCondition);
 
         //transitions from run state
         At(walk, run,WalkCondition);
         At(idle, run,IdleCondition);
+        At(aim, run, AimCondition);
 
         //transitions from idle state
         At(walk, idle, WalkCondition);
         At(run, idle,RunCondition);
+        At(aim, idle, AimCondition);
 
         //transitions from jumpstate
         At(run, jump, RunCondition);
         At(walk, jump,WalkCondition);
         At(idle, jump, IdleCondition);
 
+        //transitions from aimstate
+        At(run, aim, RunCondition);
+        At(walk, aim, WalkCondition);
+        At(idle, aim, IdleCondition);
+
     }
     bool WalkCondition()
     {
-        return !input.run && (input.dpadInput.magnitude > 0f) && CharacterMover.isGrounded;
+        return !input.run && (input.dpadInput.magnitude > 0f) && CharacterMover.isGrounded&&!inputData.Aim;
     }
     bool RunCondition()
     {
-        return input.run && (input.dpadInput.magnitude > 0f) && CharacterMover.isGrounded;
+        return input.run && (input.dpadInput.magnitude > 0f) && CharacterMover.isGrounded && !inputData.Aim;
     }
 
     bool JumpCondition()
@@ -86,7 +99,12 @@ public class PlayerCharacter : MonoBehaviour
 
     bool IdleCondition()
     {
-        return ((input.dpadInput.magnitude == 0f) && CharacterMover.isGrounded);
+        return ((input.dpadInput.magnitude == 0f) && CharacterMover.isGrounded) && !inputData.Aim;
+    }
+
+    bool AimCondition()
+    {
+        return inputData.Aim;
     }
 
     void At(IState to, IState from, Func<bool> condition) => StateMachine.AddTransition(to, from, condition);

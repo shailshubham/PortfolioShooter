@@ -51,5 +51,25 @@ public class GameInputSystem : MonoBehaviour
         {
             inputData.run = false;
         }
+
+        if(Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            inputData.Aim = true;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Mouse1))
+        {
+            inputData.Aim = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            inputData.shoot = true;
+        }
+
+        if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            inputData.shoot = false;
+        }
     }
 }
