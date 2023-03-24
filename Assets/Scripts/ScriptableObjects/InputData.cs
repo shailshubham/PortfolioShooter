@@ -11,4 +11,5 @@ public class InputData : ScriptableObject
     public bool run = false;
     public bool Aim = false;
     public bool shoot = false;
+    public bool reload = false;
 }

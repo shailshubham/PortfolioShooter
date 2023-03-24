@@ -71,5 +71,14 @@ public class GameInputSystem : MonoBehaviour
         {
             inputData.shoot = false;
         }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            inputData.reload = true;
+        }
+
+        if (Input.GetKeyUp(KeyCode.R))
+        {
+            inputData.reload = false;
+        }
     }
 }

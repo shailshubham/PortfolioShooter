@@ -9,13 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45e859544a2f5bd448c9a52745b18458, type: 3}
-  m_Name: InputData
+  m_Script: {fileID: 11500000, guid: 71b8c996d78b93f48894b33507073c43, type: 3}
+  m_Name: DeasertEagle
   m_EditorClassIdentifier: 
-  dpadInput: {x: 0, y: 0}
-  pointerInput: {x: 0, y: 0}
-  jump: 0
-  run: 0
-  Aim: 0
-  shoot: 0
-  reload: 0
+  index: 1
+  weaponName: Deasert Eagle
+  weaponType: 0
+  defaultMagzineCount: 7
+  currentMagzineCount: 7
+  fireRate: 1.5
+  range: 50
+  verticleRecoil: 1
+  horizontalRecoil: 1

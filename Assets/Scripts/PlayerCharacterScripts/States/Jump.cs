@@ -11,6 +11,7 @@ public class Jump : IState
     AnimationRiggingController rigController;
     PlayerCharacter character;
     WeaponSystem weaponSystem;
+    CameraController camController;
     bool land = false;
 
     public Jump(PlayerCharacter character)
@@ -21,9 +22,13 @@ public class Jump : IState
         rigController = character.RigController;
         this.character = character;
         weaponSystem = character.weaponSystem;
+        camController = character.camController;
     }
     public void OnEnter()
     {
+        camController.RunAim();
+        rigController.leftHandWeight = 0f;
+        rigController.rightHandWeight = 0f;
         land = false;
         mover.Jump();
         if (character.StateMachine.previousState == character.run)

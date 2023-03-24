@@ -43,6 +43,7 @@ public class Aim : IState
         rigController.AimRigWeight = 1f;
 
         anim.SetBool("aim", true);
+        weaponSystem.CurrentWeaponAnim.SetBool("Aim", true);
 
         camController.WeaponAim();
 
@@ -62,6 +63,7 @@ public class Aim : IState
 
 
         anim.SetBool("aim", false);
+        weaponSystem.CurrentWeaponAnim.SetBool("Aim", false);
         anim.SetFloat("forward", 0f);
         anim.SetFloat("strafe", 0f);
     }

@@ -76,6 +76,7 @@ public class PlayerCharacter : MonoBehaviour
         At(run, jump, RunCondition);
         At(walk, jump,WalkCondition);
         At(idle, jump, IdleCondition);
+        At(aim, jump, AimCondition);
 
         //transitions from aimstate
         At(run, aim, RunCondition);
@@ -104,7 +105,7 @@ public class PlayerCharacter : MonoBehaviour
 
     bool AimCondition()
     {
-        return inputData.Aim;
+        return inputData.Aim&&weaponSystem.IsWeaponEquipped&&CharacterMover.isGrounded;
     }
 
     void At(IState to, IState from, Func<bool> condition) => StateMachine.AddTransition(to, from, condition);
