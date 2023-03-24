@@ -27,6 +27,13 @@ public class WeaponSystem : MonoBehaviour
         set { currentWeaponAnim = value; }
     }
 
+    Weapon currentWeapon;
+    public Weapon CurrentWeapon
+    {
+        get { return currentWeapon; }
+        set { currentWeapon = value; }
+    }
+
     public GameObject[] Weapons;
 
 
@@ -54,6 +61,7 @@ public class WeaponSystem : MonoBehaviour
             {
                 Weapons[i].SetActive(true);
                 currentWeaponAnim = Weapons[i].GetComponent<Animator>();
+                currentWeapon = Weapons[i].GetComponent<Weapon>();
                 isWeaponEquipped = true;
             }
             else
@@ -78,6 +86,7 @@ public class WeaponSystem : MonoBehaviour
             if(Weapons[i].activeSelf)
             {
                 currentWeaponAnim = Weapons[i].GetComponent<Animator>();
+                currentWeapon = Weapons[i].GetComponent<Weapon>();
                 isWeaponEquipped = true;
             }
         }

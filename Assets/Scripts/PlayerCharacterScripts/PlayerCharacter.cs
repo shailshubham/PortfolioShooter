@@ -90,12 +90,12 @@ public class PlayerCharacter : MonoBehaviour
     }
     bool RunCondition()
     {
-        return input.run && (input.dpadInput.magnitude > 0f) && CharacterMover.isGrounded && !inputData.Aim;
+        return input.run && (input.dpadInput.magnitude > 0f) && CharacterMover.isGrounded && !inputData.Aim&& !weaponSystem.CurrentWeapon.Reloading;
     }
 
     bool JumpCondition()
     {
-        return input.jump&& CharacterMover.isGrounded;
+        return input.jump&& CharacterMover.isGrounded&&!weaponSystem.CurrentWeapon.Reloading;
     }
 
     bool IdleCondition()

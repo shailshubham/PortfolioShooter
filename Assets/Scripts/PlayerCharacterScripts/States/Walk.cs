@@ -35,6 +35,8 @@ public class Walk : IState
         }
         anim.SetFloat("forward", inputData.dpadInput.y);
         anim.SetFloat("strafe", inputData.dpadInput.x);
+
+        weaponSystem.CurrentWeapon.Reload();
     }
     public void OnEnter()
     {

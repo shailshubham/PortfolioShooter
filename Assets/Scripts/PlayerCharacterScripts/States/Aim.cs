@@ -35,6 +35,9 @@ public class Aim : IState
         }
         anim.SetFloat("forward", inputData.dpadInput.y);
         anim.SetFloat("strafe", inputData.dpadInput.x);
+
+        weaponSystem.CurrentWeapon.Shoot();
+        weaponSystem.CurrentWeapon.Reload();
     }
     public void OnEnter()
     {

@@ -33,6 +33,8 @@ public class Idle : IState
             rigController.rightHandWeight = 0;
             rigController.leftHandWeight = 0;
         }
+
+        weaponSystem.CurrentWeapon.Reload();
     }
     public void OnEnter() 
     {

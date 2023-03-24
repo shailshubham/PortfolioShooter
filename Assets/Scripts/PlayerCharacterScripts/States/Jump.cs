@@ -42,7 +42,7 @@ public class Jump : IState
 
         if (mover.GroundDistance < .5f&&!land && mover.velocity.y <0)
         {
-
+            anim.SetTrigger("land");
             land = true;
         }
         //updating characterMovement
