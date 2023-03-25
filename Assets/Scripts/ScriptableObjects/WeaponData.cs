@@ -9,6 +9,7 @@ public class WeaponData : ScriptableObject
     public string weaponName = "Hand Gun";
     public enum WeaponType { single,auto,boltAction}
     public WeaponType weaponType = WeaponType.single;
+    public int damage = 10;
     public int defaultMagzineCount = 7;
     public int currentMagzineCount = 7;
     public float fireRate = 1.5f;

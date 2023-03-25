@@ -12,7 +12,9 @@ public class Weapon : MonoBehaviour
     [SerializeField] float reloadTime = 1.5f;
     [SerializeField] AudioClip fireAudioClip;
     [SerializeField] AudioClip reloadingAudioClip;
+    [SerializeField] LayerMask damageLayer;
     AudioSource audioSource;
+    Camera mainCamera = Camera.main;
     [HideInInspector] public bool Reloading = false;
     bool canShoot = true;
 
@@ -22,6 +24,8 @@ public class Weapon : MonoBehaviour
         muzzle.SetActive(false);
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+        canShoot = true;
+        Reloading = false;
     }
 
 
@@ -29,7 +33,6 @@ public class Weapon : MonoBehaviour
     {
         if (!(inputData.Aim && inputData.shoot && canShoot && !Reloading))
             return;
-
         if (weaponData.currentMagzineCount>0)
         {
             anim.SetTrigger("Shoot");
@@ -39,9 +42,18 @@ public class Weapon : MonoBehaviour
             weaponData.currentMagzineCount--;
             muzzle.SetActive(true);
             canShoot = false;
+
+            RaycastHit hit;
+            Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward,out hit, weaponData.range, damageLayer);
+            if(hit.transform.CompareTag("Enemy"))
+            {
+                hit.transform.GetComponent<Health>().Damage(weaponData.damage);
+            }
+            
         }
         else
         {
+            inputData.reload = true;
             Reload();
         }
     }
@@ -62,6 +74,7 @@ public class Weapon : MonoBehaviour
         audioSource.Play();
         weaponData.currentMagzineCount = weaponData.defaultMagzineCount;
         Invoke("ResetReloadingBool", reloadTime);
+        inputData.reload = false;
     }
 
     void ResetReloadingBool()
