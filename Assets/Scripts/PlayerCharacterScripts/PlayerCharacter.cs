@@ -11,11 +11,15 @@ public class PlayerCharacter : MonoBehaviour
     public StateMachine StateMachine { get; private set; }
     public WeaponSystem weaponSystem { get; private set; }
     public CameraController camController { get; private set; }
+
+    //states
     Idle idle;
     Walk walk;
     Aim aim;
     public Run run;
     public Jump jump;
+    Reloading reloading;
+
     [SerializeField] InputData input;
     public InputData inputData
     {
@@ -40,6 +44,8 @@ public class PlayerCharacter : MonoBehaviour
         run = new Run(this);
         jump = new Jump(this); ;
         aim = new Aim(this);
+        reloading = new Reloading(this);
+        
         TransitionSetup();
 
         StateMachine.SetState(idle);
@@ -54,23 +60,29 @@ public class PlayerCharacter : MonoBehaviour
 
     void TransitionSetup()
     {
-        //Transitions from any state
-        StateMachine.AddAnyTransition(jump,JumpCondition);
 
         //Transitions from walk stats
         At(run, walk, RunCondition);
         At(idle, walk, IdleCondition);
         At(aim, walk, AimCondition);
+        At(jump, walk, JumpCondition);
+        At(reloading, walk, ReloadingCondition);
 
         //transitions from run state
         At(walk, run,WalkCondition);
         At(idle, run,IdleCondition);
         At(aim, run, AimCondition);
+        At(jump, run, JumpCondition);
+        At(reloading, run, ReloadingCondition);
+
 
         //transitions from idle state
         At(walk, idle, WalkCondition);
         At(run, idle,RunCondition);
         At(aim, idle, AimCondition);
+        At(jump, idle, JumpCondition);
+        At(reloading, idle, ReloadingCondition);
+
 
         //transitions from jumpstate
         At(run, jump, RunCondition);
@@ -82,30 +94,68 @@ public class PlayerCharacter : MonoBehaviour
         At(run, aim, RunCondition);
         At(walk, aim, WalkCondition);
         At(idle, aim, IdleCondition);
+        At(reloading, aim, ReloadingCondition);
 
+        //transitions from Reloading State
+        At(walk, reloading, WalkCondition);
+        At(run, reloading, RunCondition);
+        At(idle, reloading, IdleCondition);
+        At(aim, reloading, AimCondition);
     }
     bool WalkCondition()
     {
-        return !input.run && (input.dpadInput.magnitude > 0f) && CharacterMover.isGrounded&&!inputData.Aim;
+        bool isReloading = weaponSystem.CurrentWeapon ? weaponSystem.CurrentWeapon.Reloading : false;
+        return 
+            !input.run 
+            && (input.dpadInput.magnitude > 0f) 
+            && CharacterMover.isGrounded
+            &&!inputData.Aim
+            &&!isReloading;
     }
     bool RunCondition()
     {
-        return input.run && (input.dpadInput.magnitude > 0f) && CharacterMover.isGrounded && !inputData.Aim&& !weaponSystem.CurrentWeapon.Reloading;
+        bool isReloading = weaponSystem.CurrentWeapon ? weaponSystem.CurrentWeapon.Reloading : false;
+
+        return
+            input.run 
+            && (input.dpadInput.magnitude > 0f) 
+            && CharacterMover.isGrounded 
+            && !inputData.Aim
+            && !isReloading;
     }
 
     bool JumpCondition()
     {
-        return input.jump&& CharacterMover.isGrounded&&!weaponSystem.CurrentWeapon.Reloading;
+        bool isReloading = weaponSystem.CurrentWeapon ? weaponSystem.CurrentWeapon.Reloading : false;
+
+        return
+            input.jump
+            && CharacterMover.isGrounded
+            &&!isReloading;
     }
 
     bool IdleCondition()
     {
-        return ((input.dpadInput.magnitude == 0f) && CharacterMover.isGrounded) && !inputData.Aim;
+        bool isReloading = weaponSystem.CurrentWeapon ? weaponSystem.CurrentWeapon.Reloading : false;
+
+        return
+            input.dpadInput.magnitude == 0f 
+            && CharacterMover.isGrounded 
+            && !inputData.Aim 
+            && !isReloading;
     }
 
     bool AimCondition()
     {
-        return inputData.Aim&&weaponSystem.IsWeaponEquipped&&CharacterMover.isGrounded;
+        return 
+            inputData.Aim&&weaponSystem.IsWeaponEquipped
+            &&CharacterMover.isGrounded;
+    }
+    bool ReloadingCondition()
+    {
+        bool isReloading = weaponSystem.CurrentWeapon ? weaponSystem.CurrentWeapon.Reloading : false;
+        return 
+            isReloading;
     }
 
     void At(IState to, IState from, Func<bool> condition) => StateMachine.AddTransition(to, from, condition);

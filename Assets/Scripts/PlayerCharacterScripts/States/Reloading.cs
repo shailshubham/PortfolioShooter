@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static PlayerCharacter;
 
-public class Idle : IState
+public class Reloading : IState
 {
     Animator anim;
     InputData inputData;
@@ -11,7 +10,7 @@ public class Idle : IState
     AnimationRiggingController rigController;
     WeaponSystem weaponSystem;
     CameraController camController;
-    public Idle(PlayerCharacter character)
+    public Reloading(PlayerCharacter character)
     {
         anim = character.Anim;
         mover = character.CharacterMover;
@@ -21,8 +20,9 @@ public class Idle : IState
         camController = character.camController;
     }
 
-    public void Update()
+        public void Update()
     {
+        mover.MoveCharacter(.15f);
         if (weaponSystem.IsWeaponEquipped)
         {
             rigController.rightHandWeight = 1;
@@ -33,20 +33,20 @@ public class Idle : IState
             rigController.rightHandWeight = 0;
             rigController.leftHandWeight = 0;
         }
-
-        weaponSystem.ChangeWeaponSystem();
-        if (weaponSystem.CurrentWeapon != null)
-        {
-            weaponSystem.CurrentWeapon.Reload();
-
-        }
+        anim.SetFloat("forward", inputData.dpadInput.y);
+        anim.SetFloat("strafe", inputData.dpadInput.x);
     }
-    public void OnEnter() 
+    public void OnEnter()
     {
-        camController.IdleAim();
-        anim.SetFloat("forward", 0f);
-        anim.SetFloat("strafe", 0f);
-        rigController.leftHandWeight = 1f;
+        rigController.weaponAimWeight = 1f;
+        rigController.weaponDefaultWeight = 0f;
+        rigController.AimRigWeight = 1f;
+
+        anim.SetBool("aim", true);
+        weaponSystem.CurrentWeaponAnim.SetBool("Aim", true);
+
+        camController.WeaponAim();
+
         if (weaponSystem.IsWeaponEquipped)
         {
             weaponSystem.CurrentWeaponAnim.SetBool("Run", false);
@@ -54,7 +54,17 @@ public class Idle : IState
     }
 
     public void OnExit()
-    { 
+    {
+        rigController.weaponAimWeight = 0f;
+        rigController.weaponDefaultWeight = 1f;
+        rigController.AimRigWeight = 0f;
+        rigController.rightHandWeight = 0;
+        rigController.leftHandWeight = 0;
 
+
+        anim.SetBool("aim", false);
+        weaponSystem.CurrentWeaponAnim.SetBool("Aim", false);
+        anim.SetFloat("forward", 0f);
+        anim.SetFloat("strafe", 0f);
     }
 }

@@ -40,6 +40,11 @@ public class Run : IState
             rigController.rightHandWeight = 0;
             rigController.leftHandWeight = 0;
         }
+        weaponSystem.ChangeWeaponSystem();
+        if (weaponSystem.CurrentWeapon != null)
+        {
+            weaponSystem.CurrentWeapon.Reload();
+        }
     }
     public void OnEnter()
     {

@@ -43,11 +43,18 @@ public class WeaponSystem : MonoBehaviour
     }
     private void Update()
     {
-        if(Input.GetKey(KeyCode.Alpha0))
+
+    }
+
+    public void ChangeWeaponSystem()
+    {
+        if (Input.GetKey(KeyCode.Alpha0))
         {
             DeActivateWeapon();
+            currentWeapon = null;
+            currentWeaponAnim = null;
         }
-        if(Input.GetKey(KeyCode.Alpha1))
+        if (Input.GetKey(KeyCode.Alpha1))
         {
             ActivateWeapon(0);
         }
