@@ -10,6 +10,7 @@ public class Run : IState
     AnimationRiggingController rigController;
     WeaponSystem weaponSystem;
     CameraController camController;
+    PlayerData playerData;
     public Run(PlayerCharacter character)
     {
         anim = character.Anim;
@@ -18,10 +19,12 @@ public class Run : IState
         rigController = character.RigController;
         weaponSystem = character.weaponSystem;
         camController = character.camController;
+        playerData = character.playerData;
     }
 
     public void Update()
     {
+        playerData.isStealthy = false;
         float x = 1f;
         if(inputData.dpadInput.y<0)
         {
@@ -48,6 +51,7 @@ public class Run : IState
     }
     public void OnEnter()
     {
+        playerData.isStealthy = false;
         camController.RunAim();
         anim.SetBool("run", true);
         rigController.leftHandWeight = 0f;
@@ -59,6 +63,7 @@ public class Run : IState
 
     public void OnExit()
     {
+        playerData.isStealthy = true;
         anim.SetBool("run", false);
         anim.SetFloat("forward",0f);
         anim.SetFloat("strafe", 0f);

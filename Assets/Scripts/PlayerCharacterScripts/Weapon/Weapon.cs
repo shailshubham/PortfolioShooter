@@ -44,12 +44,15 @@ public class Weapon : MonoBehaviour
             canShoot = false;
 
             RaycastHit hit;
-            Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward,out hit, weaponData.range, damageLayer);
-            if(hit.transform.CompareTag("Enemy"))
+            if(Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward,out hit, weaponData.range, damageLayer))
             {
-                hit.transform.GetComponent<Health>().Damage(weaponData.damage);
+                if (hit.transform.CompareTag("Enemy"))
+                {
+                    hit.transform.GetComponent<Health>().Damage(weaponData.damage);
+                }
+
             }
-            
+
         }
         else
         {

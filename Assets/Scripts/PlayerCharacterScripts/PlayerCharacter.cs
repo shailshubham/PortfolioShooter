@@ -25,6 +25,7 @@ public class PlayerCharacter : MonoBehaviour
     {
         get { return input; }
     }
+    public PlayerData playerData;
     private void Awake()
     {
         Anim = GetComponentInChildren<Animator>();
@@ -55,7 +56,7 @@ public class PlayerCharacter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        playerData.playerPosition = transform.position;
     }
 
     void TransitionSetup()
