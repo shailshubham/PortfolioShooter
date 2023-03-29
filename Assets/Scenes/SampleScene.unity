@@ -4980,6 +4980,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 321932278035742359, guid: d6d1fbb5b2505c446ba8b978762a3d8f, type: 3}
+      propertyPath: m_Speed
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 321932278035742359, guid: d6d1fbb5b2505c446ba8b978762a3d8f, type: 3}
+      propertyPath: m_Height
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 321932278035742359, guid: d6d1fbb5b2505c446ba8b978762a3d8f, type: 3}
+      propertyPath: m_AngularSpeed
+      value: 900
+      objectReference: {fileID: 0}
+    - target: {fileID: 321932278035742359, guid: d6d1fbb5b2505c446ba8b978762a3d8f, type: 3}
+      propertyPath: m_StoppingDistance
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 321932278035742360, guid: d6d1fbb5b2505c446ba8b978762a3d8f, type: 3}
+      propertyPath: usePatrol
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 321932278035742360, guid: d6d1fbb5b2505c446ba8b978762a3d8f, type: 3}
+      propertyPath: chaseSpeed
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 321932278035742360, guid: d6d1fbb5b2505c446ba8b978762a3d8f, type: 3}
       propertyPath: wayPoints.Array.data[0]
       value: 

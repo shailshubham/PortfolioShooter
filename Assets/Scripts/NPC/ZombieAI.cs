@@ -11,6 +11,8 @@ public class ZombieAI : MonoBehaviour
 
     [SerializeField] Transform feedPoint;
     [SerializeField] float patrolDelay = 5f;
+    [SerializeField] float patrolSpeed = .5f;
+    [SerializeField] float chaseSpeed = 2f;
     [SerializeField] float agroRange = 10f;
     [SerializeField] PlayerData playerData;
     [SerializeField] Transform eye;
@@ -20,10 +22,12 @@ public class ZombieAI : MonoBehaviour
 
 
     //private properties
-    Animator anim;
-    NavMeshAgent agent;
-    float idleTime = 0f;
-
+    [HideInInspector] public Animator anim;
+    [HideInInspector] public NavMeshAgent agent;
+    float timeElapsed = 0f;
+    bool isAttacking = false;
+    float animForward = 0f;
+    float currentAnimForward = 0f;
     public bool playerInSight = false;
 
     private void Awake()
@@ -41,7 +45,8 @@ public class ZombieAI : MonoBehaviour
     void Update()
     {
         playerInSight = IsPlayerInSight();
-        anim.SetFloat("Forward", agent.velocity.sqrMagnitude);
+        currentAnimForward = Mathf.Lerp(currentAnimForward, animForward, 1f);
+        anim.SetFloat("Forward", currentAnimForward);
         switch(state)
         {
             case State.feed:
@@ -49,84 +54,129 @@ public class ZombieAI : MonoBehaviour
                 break;
 ////**************************************************************////////
             case State.idle:
-                if(usePatrol)
-                    idleTime += Time.deltaTime;
-                ToPatrol();
-                ToChase();
-                ToAttack();
+                if(usePatrol&&!IsPlayerInSight())
+                {
+                    timeElapsed += Time.deltaTime;
+                    if(timeElapsed>patrolDelay)
+                    {
+                        timeElapsed = 0;
+                        ToPatrol();
+                    }
+                }
+                if(IsPlayerInSight())
+                {
+                    timeElapsed = 0;
+                    ToChase();
+                }
+                animForward = 0f;
                 break;
 
 
 ////**************************************************************////////
             case State.patrol:
-                ToIdle();
-                ToChase();
-                ToAttack();
+                if(IsDistinationReached()&&!IsPlayerInSight())
+                {
+                    ToIdle();
+                }
+                if (IsPlayerInSight())
+                {
+                    ToChase();
+                }
+                animForward = .5f;
                 break;
 
 
 ////**************************************************************////////
             case State.chase:
-                ToIdle();
-                ToAttack();
-                ToPatrol();
-                agent.SetDestination(playerData.playerPosition);
+                if(IsPlayerInSight())
+                {
+                    agent.SetDestination(playerData.playerPosition);
+                    if (IsDistinationReached())
+                    {
+                        ToAttack();
+                    }
+                }
+                else
+                {
+                    Stop();
+                    ToIdle();
+                }
+                animForward = 1f;
                 break;
 
 
  ////**************************************************************////////
             case State.attack:
-                ToPatrol();
-                ToChase();
+                if(IsPlayerInSight())
+                {
+                    if (IsPlayerInAttackingRange())
+                    {
+                        Attack(true);
+                    }
+                    else if(!isAttacking)
+                    {
+                        Attack(false);
+                        ToChase();
+                    }
+                }
+                else if(!isAttacking)
+                {
+                    Attack(false);
+                    Stop();
+                    ToIdle();
+                }
+                animForward = 0f;
+
                 break;
         }
     }
 
+    //function
+    void Attack(bool attack)
+    {
+        anim.SetBool("Attack",attack);
+        isAttacking = true;
+        Invoke("ResetAttackBool", 3f);
+    }
+    void ResetAttackBool()
+    {
+        isAttacking = false;
+    }
+    void Stop()
+    {
+        agent.SetDestination(transform.position);
+    }
 
-    //Transition Methods
+    //Transition function
     void ToPatrol()
     {
-        if(IsPlayerInSight())
-            return;
-
-        if (usePatrol)
-        {
-            if (idleTime > patrolDelay)
-            {
-                agent.SetDestination(wayPoints[wayPointIndex].position);
-                wayPointIndex++;
-                if (wayPointIndex == wayPoints.Length)
-                    wayPointIndex = 0;
-                anim.SetBool("Run", false);
-                state = State.patrol;
-                idleTime = 0f;
-                
-            }
-        }
+        agent.SetDestination(wayPoints[wayPointIndex].position);
+        wayPointIndex++;
+        if (wayPointIndex == wayPoints.Length)
+            wayPointIndex = 0;
+        anim.SetBool("Run", false);
+        agent.speed = patrolSpeed;
+        state = State.patrol;
+        timeElapsed = 0f;
     }
     void ToIdle()
     {
-        if(!IsPlayerInSight()&&ReachedDistination())
-        {
-            state = State.idle;
-            anim.SetBool("Run", false);
-        }
+        state = State.idle;
+        anim.SetBool("Run", false);
     }
     void ToChase()
     {
-        if(IsPlayerInSight()&&!ReachedDistination())
-        {
-            state = State.chase;
-        }
+        agent.speed = chaseSpeed;
+        state = State.chase;
     }
     void ToAttack()
     {
-        if(IsPlayerInSight()&&ReachedDistination())
-        {
-            state = State.attack;
-        }
+        Stop();
+        state = State.attack;
     }
 
+
+    //Bool function
     bool IsPlayerInSight()
     {
         if (Vector3.Distance(playerData.playerPosition, transform.position) < agroRange)
@@ -135,14 +185,17 @@ public class ZombieAI : MonoBehaviour
             Physics.Raycast(ray, out var hit);
             if (hit.transform.CompareTag("Player"))
             {
-                agent.SetDestination(playerData.playerPosition);
                 return true;
             }
         }
         return false;
     }
+    bool IsPlayerInAttackingRange()
+    {
+        return Vector3.Distance(playerData.playerPosition,transform.position)<=agent.stoppingDistance;
+    }
 
-    bool ReachedDistination()
+    bool IsDistinationReached()
     {
         return agent.remainingDistance <= agent.stoppingDistance;
     }
