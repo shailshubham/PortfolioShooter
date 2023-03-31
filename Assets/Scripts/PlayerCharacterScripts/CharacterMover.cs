@@ -38,7 +38,6 @@ public class CharacterMover : MonoBehaviour
     private void FixedUpdate()
     {
         isGrounded = GroundCheckNew(out GroundDistance);
-        Debug.Log(isGrounded);
     }
 
     public void Jump()

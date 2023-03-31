@@ -9,23 +9,26 @@ public class Weapon : MonoBehaviour
     [SerializeField] InputData inputData;
     [SerializeField] WeaponData weaponData;
     [SerializeField] GameObject muzzle;
+    [SerializeField] GameObject laser;
     [SerializeField] float reloadTime = 1.5f;
     [SerializeField] AudioClip fireAudioClip;
     [SerializeField] AudioClip reloadingAudioClip;
     [SerializeField] LayerMask damageLayer;
     AudioSource audioSource;
-    Camera mainCamera = Camera.main;
+    Camera mainCamera;
     [HideInInspector] public bool Reloading = false;
     bool canShoot = true;
 
     // Start is called before the first frame update
     void Start()
     {
+        mainCamera = Camera.main;
         muzzle.SetActive(false);
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         canShoot = true;
         Reloading = false;
+        laser.SetActive(false);
     }
 
 
@@ -40,6 +43,7 @@ public class Weapon : MonoBehaviour
             audioSource.clip = fireAudioClip;
             audioSource.Play();
             weaponData.currentMagzineCount--;
+            laser.SetActive(false);
             muzzle.SetActive(true);
             canShoot = false;
 
@@ -48,7 +52,8 @@ public class Weapon : MonoBehaviour
             {
                 if (hit.transform.CompareTag("Enemy"))
                 {
-                    hit.transform.GetComponent<Health>().Damage(weaponData.damage);
+                    hit.transform.GetComponent<IHealth>().TakeDamage(weaponData.damage);
+                    Debug.Log("ShotSuccessfully");
                 }
 
             }
@@ -64,6 +69,7 @@ public class Weapon : MonoBehaviour
     {
         canShoot = true;
         muzzle.SetActive(false);
+        laser.SetActive(true);
     }
 
     public void Reload()
@@ -73,6 +79,7 @@ public class Weapon : MonoBehaviour
 
         Reloading = true;
         anim.SetTrigger("Reload");
+        laser.SetActive(false);
         audioSource.clip = reloadingAudioClip;
         audioSource.Play();
         weaponData.currentMagzineCount = weaponData.defaultMagzineCount;
@@ -83,5 +90,11 @@ public class Weapon : MonoBehaviour
     void ResetReloadingBool()
     {
         Reloading = false;
+        laser.SetActive(true);
+    }
+
+    public GameObject Laser
+    {
+        get { return laser; }
     }
 }

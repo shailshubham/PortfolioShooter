@@ -47,6 +47,7 @@ public class Aim : IState
 
         anim.SetBool("aim", true);
         weaponSystem.CurrentWeaponAnim.SetBool("Aim", true);
+        weaponSystem.CurrentWeapon.Laser.SetActive(true);
 
         camController.WeaponAim();
 
@@ -67,6 +68,7 @@ public class Aim : IState
 
         anim.SetBool("aim", false);
         weaponSystem.CurrentWeaponAnim.SetBool("Aim", false);
+        weaponSystem.CurrentWeapon.Laser.SetActive(false);
         anim.SetFloat("forward", 0f);
         anim.SetFloat("strafe", 0f);
     }

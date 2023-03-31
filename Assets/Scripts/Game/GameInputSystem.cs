@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class GameInputSystem : MonoBehaviour
@@ -17,6 +18,7 @@ public class GameInputSystem : MonoBehaviour
         inputData.dpadInput = Vector2.zero;
         inputData.pointerInput= Vector2.zero;
         inputData.jump = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
