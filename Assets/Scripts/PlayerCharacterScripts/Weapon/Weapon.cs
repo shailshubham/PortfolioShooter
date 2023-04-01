@@ -48,7 +48,7 @@ public class Weapon : MonoBehaviour
             canShoot = false;
 
             RaycastHit hit;
-            if(Physics.Raycast(mainCamera.transform.position, mainCamera.transform.forward,out hit, weaponData.range, damageLayer))
+            if(Physics.Raycast(laser.transform.position, laser.transform.forward,out hit, weaponData.range, damageLayer))
             {
                 if (hit.transform.CompareTag("Enemy"))
                 {

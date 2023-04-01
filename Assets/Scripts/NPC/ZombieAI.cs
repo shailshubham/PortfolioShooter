@@ -30,8 +30,10 @@ public class ZombieAI : MonoBehaviour,IHealth
     float timeElapsed = 0f;
     bool isAttacking = false;
     bool isGettingHit = false;
+    bool useHitAnimation = true;
     float animForward = 0f;
     float currentAnimForward = 0f;
+    
     public bool playerInSight = false;
 
     private void Awake()
@@ -60,6 +62,9 @@ public class ZombieAI : MonoBehaviour,IHealth
         playerInSight = IsPlayerInSight();
         currentAnimForward = Mathf.Lerp(currentAnimForward, animForward, .1f);
         anim.SetFloat("Forward", currentAnimForward);
+
+        
+        //State Machine
         switch(state)
         {
             case State.feed:
@@ -192,7 +197,7 @@ public class ZombieAI : MonoBehaviour,IHealth
         Debug.Log("Attack Triggered");
         isAttacking = true;
         zAudio.Attack();
-        Invoke("ResetAttackBool", 2.67f);
+        Invoke("ResetAttackBool", 2.1f);
     }
     void ResetAttackBool()
     {
@@ -209,6 +214,8 @@ public class ZombieAI : MonoBehaviour,IHealth
     }
     public void TakeDamage(int damage)
     {
+        if (state == State.death)
+            return;
         if (!isGettingHit)
         {
             health = health - damage;
@@ -216,7 +223,7 @@ public class ZombieAI : MonoBehaviour,IHealth
             {
                 ToDeath();
             }
-            else
+            else if (useHitAnimation)
             {
                 anim.SetTrigger("Hit");
                 isGettingHit = true;
@@ -225,7 +232,9 @@ public class ZombieAI : MonoBehaviour,IHealth
                 zAudio.Hit();
                 screamAtFirstChase = false;
                 screaming = false;
+                useHitAnimation = false;
                 Invoke("ResetHitBool", 2.05f);
+                Invoke("ResetUseHitAnimationBool", 5f);
             }
         }
         else
@@ -238,7 +247,10 @@ public class ZombieAI : MonoBehaviour,IHealth
             }
         }
     }
-
+    void ResetUseHitAnimationBool()
+    {
+        useHitAnimation = true;
+    }
     void ResetHitBool()
     {
         isGettingHit = false;
@@ -287,6 +299,7 @@ public class ZombieAI : MonoBehaviour,IHealth
 
     void ToDeath()
     {
+        GetComponent<Collider>().enabled = false;
         anim.SetBool("Dead", true);
         zAudio.Death();
         state = State.death;
