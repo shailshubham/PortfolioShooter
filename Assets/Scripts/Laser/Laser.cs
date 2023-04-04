@@ -27,6 +27,12 @@ public class Laser : MonoBehaviour
             redDot.size = new Vector3(dotScaleMultiplier,dotScaleMultiplier, redDot.size.z);
             line.endWidth = redDotSizeMax*.1f;
         }
+        else
+        {
+            line.SetPosition(1,transform.InverseTransformPoint( transform.position + transform.forward * 500f));
+            redDot.size = new Vector3(redDotSizeMax, redDotSizeMax, redDot.size.z);
+
+        }
         
     }
 }

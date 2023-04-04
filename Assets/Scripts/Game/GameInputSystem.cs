@@ -18,7 +18,7 @@ public class GameInputSystem : MonoBehaviour
         inputData.dpadInput = Vector2.zero;
         inputData.pointerInput= Vector2.zero;
         inputData.jump = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
@@ -32,6 +32,8 @@ public class GameInputSystem : MonoBehaviour
 
         float  pointerX = Input.GetAxis("Mouse X");
         float pointerY = Input.GetAxis("Mouse Y");
+
+        inputData.pointerInputPosition = Input.mousePosition;
 
         inputData.pointerInput.x = pointerX;
         inputData.pointerInput.y = pointerY;
