@@ -93,7 +93,7 @@ MonoBehaviour:
   itemData: {fileID: 11400000, guid: 26bb7072a15bfa44f946b921f9582f4c, type: 2}
   input: {fileID: 11400000, guid: 32eb89e6bcf35e64a8cb035a622e663b, type: 2}
   parentAfterDrag: {fileID: 0}
-  itemCountText: {fileID: 0}
+  itemCountText: {fileID: 1332752676548595228}
   amount: 0
 --- !u!1 &9018302926526501478
 GameObject:

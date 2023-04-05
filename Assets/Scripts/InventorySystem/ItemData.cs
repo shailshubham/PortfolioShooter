@@ -8,7 +8,7 @@ public class ItemData : ScriptableObject
 {
     public string itemName = "item name";
     public int itemID = 0;
-    public enum ItemType { consoumable,non_consumable}
+    public enum ItemType { consumable,non_consumable}
     public ItemType itemType;
     public Sprite sprite;
     public int amount = 0;

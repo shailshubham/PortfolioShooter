@@ -42,7 +42,7 @@ public class Inventory : MonoBehaviour
     {
         bool returnBool = false;
         amountAvailable = 0;
-        if (itemData.itemType == ItemData.ItemType.consoumable)
+        if (itemData.itemType == ItemData.ItemType.consumable)
         {
             int remainingItem = count;
             while (remainingItem != 0&&isItemAvailable(itemData))
@@ -81,7 +81,7 @@ public class Inventory : MonoBehaviour
     }
     public void AddItemToInventory(ItemData itemData,int count)
     {
-        if(itemData.itemType == ItemData.ItemType.consoumable)
+        if(itemData.itemType == ItemData.ItemType.consumable)
         {
             AddConsumableItem(itemData,count);
         }
@@ -94,15 +94,24 @@ public class Inventory : MonoBehaviour
     void AddConsumableItem(ItemData itemData,int count)
     {
         int remainingItem = count; 
-        while(remainingItem!=0&&IsEmptySlotAvailable())
+        while(remainingItem!=0&&IsSpaceAvailable(itemData))
         {
             int space;
             InventoryItemIcon itemIcon;
             if(CheckLeastSpaceConsumableItemInInventory(itemData,out space,out itemIcon))
             {
-                itemIcon.amount += space;
-                remainingItem -= space;
-                itemData.amount += space;
+                if(count<space)
+                {
+                    itemIcon.amount += count;
+                    remainingItem -= count;
+                    itemData.amount += count;
+                }
+                else
+                {
+                    itemIcon.amount += space;
+                    remainingItem -= space;
+                    itemData.amount += space;
+                }
             }
             else
             {
@@ -128,10 +137,12 @@ public class Inventory : MonoBehaviour
         if (IsThereASlotEmpty(out itemSlot))
         {
             InventoryItemIcon itemIcon = Instantiate(itemIconPref).GetComponent<InventoryItemIcon>();
+            itemIcon.transform.SetParent(itemSlot.transform);
             itemIcon.itemData = itemData;
             itemIcon.amount = amount;
             itemSlot.itemData = itemData;
             itemSlot.containsItem = true;
+            itemSlot.itemIcon = itemIcon;
         }
     }
     bool CheckLeastSpaceConsumableItemInInventory(ItemData itemData, out int itemSpace, out InventoryItemIcon ItemIconWithLeastSpace)
@@ -218,13 +229,35 @@ public class Inventory : MonoBehaviour
         itemSlot = null;
         return false;
     }
-    public bool IsEmptySlotAvailable()
+    public bool IsSpaceAvailable(ItemData itemData)
     {
-        foreach(InventoryItemSlot slot in itemSlots)
+        if(itemData.itemType == ItemData.ItemType.non_consumable)
         {
-            if (!slot.containsItem)
-                return true;
+            foreach (InventoryItemSlot slot in itemSlots)
+            {
+                if (!slot.containsItem)
+                    return true;
+            }
         }
+        else
+        {
+            foreach (InventoryItemSlot slot in itemSlots)
+            {
+                if (!slot.containsItem)
+                    return true;
+            }
+
+            foreach (InventoryItemSlot slot in itemSlots)
+            {
+                if (slot.itemData.itemID == itemData.itemID)
+                {
+                    if (slot.itemData.amount < itemData.amountLimitPerSlot)
+                        return true;
+                }
+                    
+            }
+        }
+
         return false;
     }
 
