@@ -8,6 +8,7 @@ public class Weapon : MonoBehaviour
 
     [SerializeField] InputData inputData;
     [SerializeField] WeaponData weaponData;
+    [SerializeField] ItemData ammoData;
     [SerializeField] GameObject muzzle;
     [SerializeField] GameObject laser;
     [SerializeField] float reloadTime = 1.5f;
@@ -74,17 +75,20 @@ public class Weapon : MonoBehaviour
 
     public void Reload()
     {
-        if (!(weaponData.currentMagzineCount < weaponData.defaultMagzineCount && inputData.reload && !Reloading))
+        if (!(weaponData.currentMagzineCount<weaponData.defaultMagzineCount&& inputData.reload && !Reloading))
             return;
+        if(Inventory.instance.UseConsumableItem(ammoData,weaponData.defaultMagzineCount-weaponData.currentMagzineCount,out int availableMagCount))
+        {
+            Reloading = true;
+            anim.SetTrigger("Reload");
+            laser.SetActive(false);
+            audioSource.clip = reloadingAudioClip;
+            audioSource.Play();
+            weaponData.currentMagzineCount += availableMagCount;
+            Invoke("ResetReloadingBool", reloadTime);
+            inputData.reload = false;
+        }
 
-        Reloading = true;
-        anim.SetTrigger("Reload");
-        laser.SetActive(false);
-        audioSource.clip = reloadingAudioClip;
-        audioSource.Play();
-        weaponData.currentMagzineCount = weaponData.defaultMagzineCount;
-        Invoke("ResetReloadingBool", reloadTime);
-        inputData.reload = false;
     }
 
     void ResetReloadingBool()

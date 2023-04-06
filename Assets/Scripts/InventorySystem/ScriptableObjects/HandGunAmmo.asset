@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 510d660dbe81ea849bf929d2094a1049, type: 3}
-  m_Name: testItem
+  m_Name: HandGunAmmo
   m_EditorClassIdentifier: 
   itemName: item name
   itemID: 1
   itemType: 0
-  sprite: {fileID: 21300000, guid: f9161c6c9e06dc445ada3ee16d991f90, type: 3}
-  amount: 160
-  amountLimitPerSlot: 50
+  sprite: {fileID: 21300000, guid: 32b17d0ad0a49dd4dbe33c326ec48b70, type: 3}
+  amount: 0
+  amountLimitPerSlot: 30
   amountOnObjectPick: 15
   isAvailable: 0

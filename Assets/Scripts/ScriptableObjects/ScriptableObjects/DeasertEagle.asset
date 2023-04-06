@@ -15,8 +15,9 @@ MonoBehaviour:
   index: 1
   weaponName: Hand Gun
   weaponType: 0
+  damage: 10
   defaultMagzineCount: 7
-  currentMagzineCount: 3
+  currentMagzineCount: 7
   fireRate: 4
   range: 50
   verticleRecoil: 1

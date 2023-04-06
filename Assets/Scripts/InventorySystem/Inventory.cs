@@ -41,12 +41,18 @@ public class Inventory : MonoBehaviour
     public bool UseConsumableItem(ItemData itemData,int count,out int amountAvailable)
     {
         bool returnBool = false;
-        amountAvailable = 0;
+        int amountAvailableTemp = 0;
+        int remainingItem = count;
+
         if (itemData.itemType == ItemData.ItemType.consumable)
         {
-            int remainingItem = count;
-            while (remainingItem != 0&&isItemAvailable(itemData))
+            while (remainingItem != 0)
             {
+                if (!isItemAvailable(itemData))
+                {
+                    remainingItem = 0;
+                }
+                    
                 InventoryItemIcon itemIcon;
                 if (CheckLeastConsumableItemInInventory(itemData, out itemIcon,out var itemSlot))
                 {
@@ -54,9 +60,10 @@ public class Inventory : MonoBehaviour
                     {
                         itemIcon.amount -= remainingItem;
                         itemData.amount -= remainingItem;
-                        amountAvailable += remainingItem;
+                        amountAvailableTemp += remainingItem;
                         returnBool = true;
-                        if(itemData.amount == 0)
+                        remainingItem = 0;
+                        if (itemIcon.amount == 0)
                         {
                             itemSlot.containsItem = false;
                             itemSlot.itemData = null;
@@ -67,7 +74,8 @@ public class Inventory : MonoBehaviour
                     else
                     {
                         itemData.amount -= itemIcon.amount;
-                        amountAvailable += itemIcon.amount;
+                        remainingItem -= itemIcon.amount;
+                        amountAvailableTemp += itemIcon.amount;
 
                         itemSlot.containsItem = false;
                         itemSlot.itemData = null;
@@ -77,6 +85,7 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
+        amountAvailable = amountAvailableTemp;
         return returnBool;
     }
     public void AddItemToInventory(ItemData itemData,int count)
@@ -185,9 +194,9 @@ public class Inventory : MonoBehaviour
         int leastAmount = 0;
         leastAmountItemIcon = null;
         slotWithLeastItem = null;
+        InventoryItemIcon itemIconWithLeastAmount = null;
         foreach (InventoryItemSlot itemSlot in itemSlots)
         {
-            InventoryItemIcon itemIconWithLeastAmount = null;
             if (!itemSlot.containsItem)
                 continue;
             if(itemSlot.itemData.itemID == itemData.itemID)
