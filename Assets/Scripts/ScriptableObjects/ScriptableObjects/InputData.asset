@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dpadInput: {x: 0, y: 0}
   pointerInput: {x: 0, y: 0}
+  pointerInputPosition: {x: 2101.947, y: 1360.0087}
   jump: 0
   run: 0
-  Aim: 0
+  Aim: 1
   shoot: 0
-  reload: 0
+  reload: 1
