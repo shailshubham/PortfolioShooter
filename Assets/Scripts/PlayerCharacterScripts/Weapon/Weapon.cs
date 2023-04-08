@@ -19,12 +19,23 @@ public class Weapon : MonoBehaviour
     Camera mainCamera;
     [HideInInspector] public bool Reloading = false;
     bool canShoot = true;
+    bool flameActive = false;
+    ParticleSystem flame;
 
     // Start is called before the first frame update
     void Start()
     {
         mainCamera = Camera.main;
-        muzzle.SetActive(false);
+        if(weaponData.weaponType != WeaponData.WeaponType.flameThrower)
+        {
+            muzzle.SetActive(false);
+        }
+        {
+            muzzle.SetActive(true);
+            flame = muzzle.GetComponent<ParticleSystem>();
+            flame.Stop();
+        }
+
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         canShoot = true;
@@ -35,28 +46,53 @@ public class Weapon : MonoBehaviour
 
     public void Shoot()
     {
-        if (!(inputData.Aim && inputData.shoot && canShoot && !Reloading))
+        if (!(inputData.Aim && canShoot && !Reloading))
             return;
         if (weaponData.currentMagzineCount>0)
         {
-            anim.SetTrigger("Shoot");
-            Invoke("ResetCanShoot", 1 / weaponData.fireRate);
-            audioSource.clip = fireAudioClip;
-            audioSource.Play();
-            weaponData.currentMagzineCount--;
-            laser.SetActive(false);
-            muzzle.SetActive(true);
-            canShoot = false;
-
-            RaycastHit hit;
-            if(Physics.Raycast(laser.transform.position, laser.transform.forward,out hit, weaponData.range, damageLayer))
+            if (inputData.shoot)
             {
-                if (hit.transform.CompareTag("Enemy"))
+                if (weaponData.weaponType != WeaponData.WeaponType.flameThrower)
                 {
-                    hit.transform.GetComponent<IHealth>().TakeDamage(weaponData.damage);
-                    Debug.Log("ShotSuccessfully");
-                }
+                    Invoke("ResetCanShoot", 1 / weaponData.fireRate);
+                    audioSource.clip = fireAudioClip;
+                    audioSource.Play();
+                    weaponData.currentMagzineCount--;
+                    laser.SetActive(false);
+                    muzzle.SetActive(true);
+                    canShoot = false;
+                    anim.SetTrigger("Shoot");
+                    RaycastHit hit;
+                    if (Physics.Raycast(laser.transform.position, laser.transform.forward, out hit, weaponData.range, damageLayer))
+                    {
+                        if (hit.transform.CompareTag("Enemy"))
+                        {
+                            hit.transform.GetComponent<IHealth>().TakeDamage(weaponData.damage);
+                            Debug.Log("ShotSuccessfully");
+                        }
 
+                    }
+                }
+                else
+                {
+                    if(!flameActive)
+                    {
+                        flame.loop = true;
+                        flame.Play();
+                        flameActive = true;
+                    }
+
+                }
+            }
+            else
+            {
+                if(weaponData.weaponType == WeaponData.WeaponType.flameThrower&&flameActive)
+                {
+                    flame.Pause();
+                    flame.loop = false;
+                    flame.Play();
+                    flameActive = false;
+                }
             }
 
         }

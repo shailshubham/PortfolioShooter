@@ -9,14 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45e859544a2f5bd448c9a52745b18458, type: 3}
-  m_Name: InputData
+  m_Script: {fileID: 11500000, guid: 71b8c996d78b93f48894b33507073c43, type: 3}
+  m_Name: FlameThrower
   m_EditorClassIdentifier: 
-  dpadInput: {x: 0, y: 0}
-  pointerInput: {x: 0, y: 0}
-  pointerInputPosition: {x: 2807.3696, y: 2523.2222}
-  jump: 0
-  run: 0
-  Aim: 0
-  shoot: 0
-  reload: 1
+  index: 1
+  weaponName: Flame Thrower
+  weaponType: 3
+  damage: 10
+  defaultMagzineCount: 100
+  currentMagzineCount: 100
+  fireRate: 1.5
+  range: 10
+  verticleRecoil: 0
+  horizontalRecoil: 0
