@@ -56,7 +56,27 @@ public class WeaponSystem : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.Alpha1))
         {
+            if (!Inventory.instance.CheckItemAvailablityByName("Deasert Eagle"))
+                return;
             ActivateWeapon(0);
+        }
+        if (Input.GetKey(KeyCode.Alpha2))
+        {
+            if (!Inventory.instance.CheckItemAvailablityByName("Shotgun"))
+                return;
+            ActivateWeapon(1);
+        }
+        if (Input.GetKey(KeyCode.Alpha3))
+        {
+            if (!Inventory.instance.CheckItemAvailablityByName("M4A1"))
+                return;
+            ActivateWeapon(2);
+        }
+        if (Input.GetKey(KeyCode.Alpha4))
+        {
+            if (!Inventory.instance.CheckItemAvailablityByName("Flame Thrower"))
+                return;
+            ActivateWeapon(3);
         }
     }
 

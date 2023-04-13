@@ -29,6 +29,8 @@ public class Weapon : MonoBehaviour
         if(weaponData.weaponType != WeaponData.WeaponType.flameThrower)
         {
             muzzle.SetActive(false);
+            Reloading = false;
+            laser.SetActive(false);
         }
         {
             muzzle.SetActive(true);
@@ -39,10 +41,19 @@ public class Weapon : MonoBehaviour
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         canShoot = true;
-        Reloading = false;
-        laser.SetActive(false);
+
     }
 
+    private void Update()
+    {
+        if (weaponData.weaponType == WeaponData.WeaponType.flameThrower && flameActive&&!inputData.shoot)
+        {
+            flame.Pause();
+            flame.loop = false;
+            flame.Play();
+            flameActive = false;
+        }
+    }
 
     public void Shoot()
     {
@@ -82,16 +93,6 @@ public class Weapon : MonoBehaviour
                         flameActive = true;
                     }
 
-                }
-            }
-            else
-            {
-                if(weaponData.weaponType == WeaponData.WeaponType.flameThrower&&flameActive)
-                {
-                    flame.Pause();
-                    flame.loop = false;
-                    flame.Play();
-                    flameActive = false;
                 }
             }
 

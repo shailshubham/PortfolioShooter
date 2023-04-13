@@ -270,7 +270,7 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
-    bool isItemAvailable(ItemData itemData)
+    public bool isItemAvailable(ItemData itemData)
     {
         foreach (InventoryItemSlot slot in itemSlots)
         {
@@ -279,6 +279,16 @@ public class Inventory : MonoBehaviour
                 if (slot.itemData.itemID == itemData.itemID)
                     return true;
             }
+        }
+        return false;
+    }
+
+    public bool CheckItemAvailablityByName(string name)
+    {
+        foreach(InventoryItemSlot slot in itemSlots)
+        {
+            if (slot.itemData.itemName == name)
+                return true;
         }
         return false;
     }
