@@ -8,4 +8,5 @@ public class PlayerData : ScriptableObject
     public Vector3 playerPosition;
     public bool isStealthy = true;
     public bool isUnderAttack = false;
+    public bool isCutscenePlaying = false;
 }

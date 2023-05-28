@@ -28,7 +28,7 @@ public class PlayerCharacter : MonoBehaviour
     public PlayerData playerData;
     private void Awake()
     {
-        Anim = GetComponentInChildren<Animator>();
+        Anim = transform.GetChild(0).GetComponentInChildren<Animator>();
         //SetupAnimator();
         CharacterMover = GetComponent<CharacterMover>();
         RigController = GetComponent<AnimationRiggingController>();

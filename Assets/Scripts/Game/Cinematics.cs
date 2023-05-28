@@ -6,10 +6,17 @@ using UnityEngine.Playables;
 public class Cinematics : MonoBehaviour
 {
     PlayableDirector director;
+    [SerializeField] Transform playerPosition;
+    [SerializeField] Transform truck, truckPos;
+    [SerializeField] PlayerData playerData;
     // Start is called before the first frame update
     void Start()
     {
         director = GetComponent<PlayableDirector>();
+        director.Play();
+        Invoke("OnCenematicEnd", (float)director.duration);
+        playerData.isCutscenePlaying = true;
+        Inventory.instance.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -21,5 +28,14 @@ public class Cinematics : MonoBehaviour
     private void OnDestroy()
     {
         
+    }
+
+    void OnCenematicEnd()
+    {
+        truck.position = truckPos.position;
+        GameManager.instance.player.transform.position = playerPosition.position;
+        GameManager.instance.player.SetActive(true);
+        Destroy(gameObject);
+        playerData.isCutscenePlaying = false;
     }
 }

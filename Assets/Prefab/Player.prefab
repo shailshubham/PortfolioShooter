@@ -1457,7 +1457,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3209229922760084346
 Transform:
   m_ObjectHideFlags: 0
@@ -3174,12 +3174,7 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 95872903572028341b47f14015c5ee23, type: 2}
     - target: {fileID: 5866666021909216657, guid: 22df0bddfe8a2b240b1339172abdec92, type: 3}
       propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'mixamorig:Spine1'\n\tTransform 'mixamorig:RightArm'\n\tTransform
-        'mixamorig:Head'\n\tTransform 'mixamorig:LeftArm'\n\tTransform 'mixamorig:RightHand'\n\tTransform
-        'mixamorig:Hips'\n\tTransform 'mixamorig:LeftForeArm'\n\tTransform 'mixamorig:RightForeArm'\n\tTransform
-        'mixamorig:Neck'\n\tTransform 'mixamorig:Spine'\n\tand more ..."
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 22df0bddfe8a2b240b1339172abdec92, type: 3}
       propertyPath: m_ApplyRootMotion
@@ -3960,6 +3955,22 @@ PrefabInstance:
     - target: {fileID: 4101879013093897477, guid: 82a09a5533471bb40b9c1c79785e7d51, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101879013851857840, guid: 82a09a5533471bb40b9c1c79785e7d51, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.44765887
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101879013851857840, guid: 82a09a5533471bb40b9c1c79785e7d51, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.4312247
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101879013851857840, guid: 82a09a5533471bb40b9c1c79785e7d51, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.54346406
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101879013851857840, guid: 82a09a5533471bb40b9c1c79785e7d51, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.56417525
       objectReference: {fileID: 0}
     - target: {fileID: 4101879013851857855, guid: 82a09a5533471bb40b9c1c79785e7d51, type: 3}
       propertyPath: copyObject

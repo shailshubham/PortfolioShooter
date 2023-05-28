@@ -7,6 +7,7 @@ public class GameInputSystem : MonoBehaviour
 {
     public static GameInputSystem instance;
     [SerializeField] InputData inputData;
+    [SerializeField] PlayerData playerData;
     private void Awake()
     {
         if (instance == null) { instance= this; }
@@ -83,6 +84,11 @@ public class GameInputSystem : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.R))
         {
             inputData.reload = false;
+        }
+
+        if((Input.GetKeyDown(KeyCode.Tab)||Input.GetKeyDown(KeyCode.I))&&!playerData.isCutscenePlaying)
+        {
+            Inventory.instance.gameObject.SetActive(!Inventory.instance.gameObject.activeSelf);
         }
     }
 }
