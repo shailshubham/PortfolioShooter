@@ -60,11 +60,11 @@ public class ItemCollectibles : MonoBehaviour
     void Collect()
     {
         Inventory.instance.AddItemToInventory(itemData, count);
-        Destroy(gameObject);
-        if(OnPickup!=null)
+        if (OnPickup != null)
         {
             OnPickup.Invoke();
         }
+        Destroy(gameObject);
     }
 
 }

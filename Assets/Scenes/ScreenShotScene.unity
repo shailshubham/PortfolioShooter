@@ -428,6 +428,63 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1001 &924814927
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6291446603540139733, guid: 1649af48baddef840b1ff48dc4e17fa9, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291446603540139733, guid: 1649af48baddef840b1ff48dc4e17fa9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.258
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291446603540139733, guid: 1649af48baddef840b1ff48dc4e17fa9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.258
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291446603540139733, guid: 1649af48baddef840b1ff48dc4e17fa9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291446603540139733, guid: 1649af48baddef840b1ff48dc4e17fa9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.27059793
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291446603540139733, guid: 1649af48baddef840b1ff48dc4e17fa9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.65328157
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291446603540139733, guid: 1649af48baddef840b1ff48dc4e17fa9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.27059793
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291446603540139733, guid: 1649af48baddef840b1ff48dc4e17fa9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.65328157
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291446603540139733, guid: 1649af48baddef840b1ff48dc4e17fa9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 225
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291446603540139733, guid: 1649af48baddef840b1ff48dc4e17fa9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6291446603540139733, guid: 1649af48baddef840b1ff48dc4e17fa9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6630536661550322799, guid: 1649af48baddef840b1ff48dc4e17fa9, type: 3}
+      propertyPath: m_Name
+      value: bottle_glassware_centrifuge_tube
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1649af48baddef840b1ff48dc4e17fa9, type: 3}
 --- !u!1001 &1251689243
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -498,6 +555,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 9a63d261c2b03c142a5af94bdd610b8c, type: 3}
       propertyPath: m_Name
       value: Desert Eagle
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 9a63d261c2b03c142a5af94bdd610b8c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a63d261c2b03c142a5af94bdd610b8c, type: 3}
