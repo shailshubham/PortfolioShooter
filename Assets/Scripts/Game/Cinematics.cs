@@ -9,10 +9,20 @@ public class Cinematics : MonoBehaviour
     [SerializeField] Transform playerPosition;
     [SerializeField] Transform truck, truckPos;
     [SerializeField] PlayerData playerData;
+    public bool cinematicEndPlacement = true;
+    public bool playOnStart = true;
     // Start is called before the first frame update
     void Start()
     {
         director = GetComponent<PlayableDirector>();
+        if(playOnStart)
+        {
+            Play();
+        }
+    }
+
+    public void Play()
+    {
         director.Play();
         Invoke("OnCenematicEnd", (float)director.duration);
         playerData.isCutscenePlaying = true;
@@ -32,9 +42,13 @@ public class Cinematics : MonoBehaviour
 
     void OnCenematicEnd()
     {
-        truck.position = truckPos.position;
-        GameManager.instance.player.transform.position = playerPosition.position;
-        GameManager.instance.player.SetActive(true);
+        if(cinematicEndPlacement)
+        {
+            truck.position = truckPos.position;
+            GameManager.instance.player.transform.position = playerPosition.position;
+            GameManager.instance.player.SetActive(true);
+        }
+
         Destroy(gameObject);
         playerData.isCutscenePlaying = false;
     }

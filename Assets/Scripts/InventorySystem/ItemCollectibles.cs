@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 public class ItemCollectibles : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class ItemCollectibles : MonoBehaviour
     bool isSpaceAvailable = false;
     [SerializeField] GameObject collectUI;
     [SerializeField] GameObject cantCollectImage;
+    public UnityEvent OnPickup;
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +61,10 @@ public class ItemCollectibles : MonoBehaviour
     {
         Inventory.instance.AddItemToInventory(itemData, count);
         Destroy(gameObject);
+        if(OnPickup!=null)
+        {
+            OnPickup.Invoke();
+        }
     }
 
 }
