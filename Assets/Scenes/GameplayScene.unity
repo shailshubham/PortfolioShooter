@@ -11674,11 +11674,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6d06bb7c0a18154a9515410f58e8d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPosition: {fileID: 511221478}
-  truck: {fileID: 1881889795}
-  truckPos: {fileID: 1957737968}
+  placables:
+  - Object: {fileID: 86304478}
+    transformToPlace: {fileID: 511221478}
+    placeOnCinematicEnd: 1
+  - Object: {fileID: 1881889792}
+    transformToPlace: {fileID: 1957737968}
+    placeOnCinematicEnd: 1
+  onCinematicsEnd:
+    m_PersistentCalls:
+      m_Calls: []
   playerData: {fileID: 11400000, guid: 3db955ce5a3043c4b9a4a47e139702c4, type: 2}
-  cinematicEndPlacement: 1
   playOnStart: 1
 --- !u!1001 &1002991798
 PrefabInstance:
@@ -13020,6 +13026,7 @@ GameObject:
   - component: {fileID: 1226474786}
   - component: {fileID: 1226474785}
   - component: {fileID: 1226474787}
+  - component: {fileID: 1226474788}
   m_Layer: 0
   m_Name: EndingCinematics
   m_TagString: Untagged
@@ -13093,12 +13100,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6d06bb7c0a18154a9515410f58e8d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPosition: {fileID: 0}
-  truck: {fileID: 0}
-  truckPos: {fileID: 0}
-  playerData: {fileID: 0}
-  cinematicEndPlacement: 1
+  placables: []
+  onCinematicsEnd:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1226474788}
+        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  playerData: {fileID: 11400000, guid: 3db955ce5a3043c4b9a4a47e139702c4, type: 2}
   playOnStart: 0
+--- !u!114 &1226474788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226474784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5054b9926595fe4d9fe5b870bbc95ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1235250408
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25566,11 +25597,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
---- !u!4 &1881889795 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8097027309065948841, guid: ba29ce8f0d61e5643b1922ad92e0ed9e, type: 3}
-  m_PrefabInstance: {fileID: 1086383117708038618}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1885346471
 PrefabInstance:
   m_ObjectHideFlags: 0

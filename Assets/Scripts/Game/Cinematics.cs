@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Playables;
 
 public class Cinematics : MonoBehaviour
 {
     PlayableDirector director;
-    [SerializeField] Transform playerPosition;
-    [SerializeField] Transform truck, truckPos;
+    [SerializeField] List<Placable> placables;
+    public UnityEvent onCinematicsEnd;
     [SerializeField] PlayerData playerData;
-    public bool cinematicEndPlacement = true;
     public bool playOnStart = true;
     // Start is called before the first frame update
     void Start()
@@ -24,7 +24,7 @@ public class Cinematics : MonoBehaviour
     public void Play()
     {
         director.Play();
-        Invoke("OnCenematicEnd", (float)director.duration);
+        Invoke("CenematicEnd", (float)director.duration);
         playerData.isCutscenePlaying = true;
         Inventory.instance.gameObject.SetActive(false);
     }
@@ -40,16 +40,30 @@ public class Cinematics : MonoBehaviour
         
     }
 
-    void OnCenematicEnd()
+    void CenematicEnd()
     {
-        if(cinematicEndPlacement)
+        foreach(Placable placable in placables)
         {
-            truck.position = truckPos.position;
-            GameManager.instance.player.transform.position = playerPosition.position;
-            GameManager.instance.player.SetActive(true);
+            if(placable.placeOnCinematicEnd)
+            {
+                placable.Object.transform.position = placable.transformToPlace.position;
+                placable.Object.transform.rotation = placable.transformToPlace.rotation;
+            }
         }
-
-        Destroy(gameObject);
         playerData.isCutscenePlaying = false;
+        if(onCinematicsEnd !=null)
+        {
+            onCinematicsEnd.Invoke();
+        }
+        Destroy(gameObject);
     }
+
+    [System.Serializable]
+    public class Placable
+    {
+        public GameObject Object;
+        public Transform transformToPlace;
+        public bool placeOnCinematicEnd;
+    }
+
 }
