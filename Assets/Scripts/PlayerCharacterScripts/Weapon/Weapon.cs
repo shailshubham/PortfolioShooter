@@ -7,7 +7,7 @@ public class Weapon : MonoBehaviour
     Animator anim;
 
     [SerializeField] InputData inputData;
-    [SerializeField] WeaponData weaponData;
+    public WeaponData weaponData;
     [SerializeField] ItemData ammoData;
     [SerializeField] GameObject muzzle;
     [SerializeField] GameObject laser;

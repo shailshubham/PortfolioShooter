@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71b8c996d78b93f48894b33507073c43, type: 3}
-  m_Name: DeasertEagle
+  m_Name: M4
   m_EditorClassIdentifier: 
-  index: 1
-  weaponName: Hand Gun
+  index: 2
+  weaponName: M4A1
   weaponType: 0
-  icon: {fileID: 21300000, guid: 637de9c6c064e564f946ad36b4d20614, type: 3}
+  icon: {fileID: 21300000, guid: 1e34d90aa2e48c2488f8c2096a98f359, type: 3}
   damage: 10
-  defaultMagzineCount: 7
-  currentMagzineCount: 7
-  fireRate: 4
+  defaultMagzineCount: 30
+  currentMagzineCount: 30
+  fireRate: 10
   range: 50
   verticleRecoil: 1
   horizontalRecoil: 1
