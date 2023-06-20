@@ -48,6 +48,7 @@ public class Cinematics : MonoBehaviour
             {
                 placable.Object.transform.position = placable.transformToPlace.position;
                 placable.Object.transform.rotation = placable.transformToPlace.rotation;
+                placable.Object.SetActive(true);
             }
         }
         playerData.isCutscenePlaying = false;
